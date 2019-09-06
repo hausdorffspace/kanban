@@ -1,4 +1,4 @@
-package pl.sda.kanbanBoard.User.server_logic;
+package pl.sda.kanbanBoard.user.server_logic;
 
 public interface ServerHandlerInterface {
     void createTask();

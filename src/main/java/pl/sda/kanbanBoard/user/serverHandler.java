@@ -1,6 +1,6 @@
-package pl.sda.kanbanBoard.User;
+package pl.sda.kanbanBoard.user;
 
-import pl.sda.kanbanBoard.User.api.ServerReader;
+import pl.sda.kanbanBoard.user.api.ServerReader;
 
 import java.io.IOException;
 import java.io.PrintWriter;
