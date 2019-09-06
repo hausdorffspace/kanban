@@ -7,10 +7,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class serverHandler {
+public class ServerHandler {
     public static void main(String[] args) throws IOException {
 
-        Socket socket = new Socket("localhost", 54345);
+        Socket socket = new Socket("localhost", 5000);
 
         new ServerReader(socket.getInputStream()).start();
 
