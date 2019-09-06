@@ -1,6 +1,6 @@
-package pl.sda.kanbanBoard.Client.server_logic;
+package pl.sda.kanbanBoard.User.server_logic;
 
-public interface UserHandlerInterface {
+public interface ServerHandlerInterface {
     void createTask();
     void moveTask();
     void updateTask();

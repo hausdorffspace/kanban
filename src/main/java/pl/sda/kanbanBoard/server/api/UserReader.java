@@ -1,4 +1,4 @@
 package pl.sda.kanbanBoard.server.api;
 
-public class ClientReader {
+public class UserReader {
 }
