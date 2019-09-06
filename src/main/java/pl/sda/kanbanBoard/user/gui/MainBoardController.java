@@ -13,14 +13,17 @@ import java.nio.charset.Charset;
 
 
 public class MainBoardController {
-
+    MainBoardController mainBoardController;
     PrintWriter writer;
     Socket socket;
+    BufferedReader reader;
 
     @FXML
     public void initialize() {
         configureCommunication();
-
+        MainBoardController mainBoardController = this.mainBoardController;
+        Thread recieverThread = new Thread(new Reciever());
+        recieverThread.start();
     }
 
 
@@ -71,6 +74,8 @@ public class MainBoardController {
     private void configureCommunication(){
         try{
             socket = new Socket("127.0.0.1", 5000);
+            InputStreamReader readerStream = new InputStreamReader(socket.getInputStream());
+            reader = new BufferedReader(readerStream);
             writer = new PrintWriter(socket.getOutputStream());
             System.out.println("web handing ready to use...");
 
@@ -78,8 +83,21 @@ public class MainBoardController {
             e.printStackTrace();
         }
     }
+    public class Reciever implements Runnable{
+        public void run(){
+            String line;
+            try {
+                while ((line = reader.readLine()) != null) {
+                    System.out.println("Readed " + line);
+                    label.setText(line);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
 
-    public class SendButtonListener implements ActionListener {
+   /* public class SendButtonListener implements ActionListener {
         @Override
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
             try{
@@ -91,6 +109,6 @@ public class MainBoardController {
             message.setText("");
             message.requestFocus();
         }
-    }
+    }*/
 
 }

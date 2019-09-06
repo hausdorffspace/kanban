@@ -1,5 +1,8 @@
 package pl.sda.kanbanBoard.server.api;
 
+import javafx.fxml.FXMLLoader;
+import pl.sda.kanbanBoard.user.gui.MainBoardController;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,13 +23,16 @@ public class UserHandler extends Thread {
     }
 
     public void run() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main_board.fxml"));
+        MainBoardController c = loader.getController();
         try {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                if (line.equalsIgnoreCase("ping")) {
-                    printWriter.println("pong");
+
+
+                    printWriter.println(line);
                     printWriter.flush();
-                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
