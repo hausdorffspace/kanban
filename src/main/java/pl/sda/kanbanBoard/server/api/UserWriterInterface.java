@@ -1,4 +1,4 @@
 package pl.sda.kanbanBoard.server.api;
 
-public class ServerWriterImplementation {
+public interface UserWriterInterface {
 }

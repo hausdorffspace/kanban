@@ -1,4 +1,6 @@
-package pl.sda.kanbanBoard.Client.api;
+package pl.sda.kanbanBoard.user.api;
 
 public interface ServerWriterInterface {
+
+
 }
