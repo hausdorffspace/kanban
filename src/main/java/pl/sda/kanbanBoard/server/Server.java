@@ -12,6 +12,7 @@ public class Server {
 
         while(true) {
             new UserHandler(serverSocket.accept()).start();
+
         }
     }
 }
