@@ -1,9 +1,11 @@
 package pl.sda.kanbanBoard.user.gui;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import pl.sda.kanbanBoard.user.api.ServerHandler;
 
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -19,15 +21,6 @@ public class MainBoardController {
     BufferedReader reader;
 
     @FXML
-    public void initialize() {
-        configureCommunication();
-        MainBoardController mainBoardController = this.mainBoardController;
-        Thread recieverThread = new Thread(new Reciever());
-        recieverThread.start();
-    }
-
-
-    @FXML
     private Label label;
 
     @FXML
@@ -36,79 +29,22 @@ public class MainBoardController {
     @FXML
     private Button createTaskButton;
 
+    ServerHandler serverHandler = new ServerHandler(writer, socket, reader, message, label);
 
-    public void createTask(ActionEvent actionEvent) {
-        try{
-            writer.println(message.getText());
-            writer.flush();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        message.setText("");
-        message.requestFocus();
+    @FXML
+    public void initialize() {
+        serverHandler.configureCommunication();
+        //MainBoardController mainBoardController = this.mainBoardController;
+        Thread recieverThread = new Thread(serverHandler.getReciever());
+        recieverThread.start();
     }
 
-    public Label getLabel() {
-        return label;
+    public void createTask() {
+        serverHandler.createTask();
     }
 
-    public void setLabel(Label label) {
-        this.label = label;
-    }
 
-    public TextField getMessage() {
-        return message;
-    }
 
-    public void setMessage(TextField message) {
-        this.message = message;
-    }
 
-    public Button getCreateTaskButton() {
-        return createTaskButton;
-    }
-
-    public void setCreateTaskButton(Button createTaskButton) {
-        this.createTaskButton = createTaskButton;
-    }
-    private void configureCommunication(){
-        try{
-            socket = new Socket("127.0.0.1", 5000);
-            InputStreamReader readerStream = new InputStreamReader(socket.getInputStream());
-            reader = new BufferedReader(readerStream);
-            writer = new PrintWriter(socket.getOutputStream());
-            System.out.println("web handing ready to use...");
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-    public class Reciever implements Runnable{
-        public void run(){
-            String line;
-            try {
-                while ((line = reader.readLine()) != null) {
-                    System.out.println("Readed " + line);
-                    label.setText(line);
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-   /* public class SendButtonListener implements ActionListener {
-        @Override
-        public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-            try{
-                writer.println(message.getText());
-                writer.flush();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            message.setText("");
-            message.requestFocus();
-        }
-    }*/
 
 }
