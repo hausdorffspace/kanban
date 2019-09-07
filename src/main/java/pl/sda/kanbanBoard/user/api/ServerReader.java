@@ -1,32 +1,40 @@
 package pl.sda.kanbanBoard.user.api;
 
-import javafx.fxml.FXML;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
+import pl.sda.kanbanBoard.user.gui.MainBoardController;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
-public class ServerReader extends Thread{
-
+public class ServerReader implements Runnable {
+    MainBoardController controller;
     BufferedReader reader;
+    public ServerReader(MainBoardController controller, InputStream stream) {
+        this.controller = controller;
+        this.reader = new BufferedReader(new InputStreamReader(stream));
 
-    public ServerReader(InputStream stream) {
-        reader = new BufferedReader(new InputStreamReader(stream));
+    }
+
+    public BufferedReader getReader() {
+        return reader;
     }
 
     public void run() {
+        String line;
         try {
-            String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                System.out.println("Readed " + line);
+
+                final String newLabel = line;
+                Platform.runLater(() -> controller.taskCreated(newLabel));
 
             }
-
-        }catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }
