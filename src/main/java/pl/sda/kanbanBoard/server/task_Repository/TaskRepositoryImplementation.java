@@ -4,14 +4,18 @@ import java.io.*;
 
 public class TaskRepositoryImplementation implements TaskRepositoryInterface {
     @Override
-    public void writeDataToFile(String message) throws FileNotFoundException {
+    public void writeDataToFile(String message) throws IOException {
+        BufferedWriter saveToFileObject =null;
         try{
-            BufferedWriter saveToFileObject = new BufferedWriter(new FileWriter("baseData.txt"));
+            saveToFileObject = new BufferedWriter(new FileWriter("baseData.txt"));
             saveToFileObject.write(message);
             saveToFileObject.newLine();
         } catch (Exception e){
             e.getStackTrace();
+        }finally {
+            saveToFileObject.close();
         }
+
 
         //PrintWriter saveToFileMessage = new PrintWriter("baseData.txt");
     }
