@@ -1,6 +1,4 @@
-package pl.sda.kanbanBoard.server;
-
-import pl.sda.kanbanBoard.server.api.UserHandler;
+package pl.sda.kanbanBoard.server.backup;
 
 import java.io.IOException;
 import java.net.ServerSocket;

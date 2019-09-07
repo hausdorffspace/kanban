@@ -1,6 +1,8 @@
 package pl.sda.kanbanBoard.server;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -40,20 +42,6 @@ public class BasicServer {
             }
         }
     }
-
-    public void saveToFile(String message) throws IOException {
-        BufferedWriter saveToFileObject = null;
-        try {
-            saveToFileObject = new BufferedWriter(new FileWriter("baseData.txt"));
-            saveToFileObject.write(message);
-            saveToFileObject.newLine();
-        } catch (Exception e) {
-            e.getStackTrace();
-        } finally {
-            saveToFileObject.close();
-        }
-    }
-
     public void send(String message){
             Iterator it = outputStreams.iterator();
             while (it.hasNext()){
