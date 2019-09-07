@@ -1,4 +1,5 @@
 package pl.sda.kanbanBoard.user.gui;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,7 +17,7 @@ public class MainBoardController {
     MainBoardController mainBoardController;
     PrintWriter writer;
     Socket socket;
-    BufferedReader reader;
+    DataInputStream reader;
 
     @FXML
     public void initialize() {
@@ -35,7 +36,7 @@ public class MainBoardController {
 
     @FXML
     private Button createTaskButton;
-
+    setter setter;
 
     public void createTask(ActionEvent actionEvent) {
         try{
@@ -75,7 +76,7 @@ public class MainBoardController {
         try{
             socket = new Socket("127.0.0.1", 5000);
             InputStreamReader readerStream = new InputStreamReader(socket.getInputStream());
-            reader = new BufferedReader(readerStream);
+            reader = new DataInputStream(socket.getInputStream());
             writer = new PrintWriter(socket.getOutputStream());
             System.out.println("web handing ready to use...");
 
@@ -89,11 +90,41 @@ public class MainBoardController {
             try {
                 while ((line = reader.readLine()) != null) {
                     System.out.println("Readed " + line);
-                    label.setText(line);
+
+                    final String newLabel = line;
+                    Platform.runLater(() -> label.setText(newLabel));
+
                 }
             }catch (Exception e){
                 e.printStackTrace();
             }
+        }
+    }
+    public  class setter{
+        Label label;
+        String message;
+
+        setter(Label label, String message){
+            this.label = label;
+            this.message = message;
+
+
+        }
+
+        public Label getLabel() {
+            return label;
+        }
+
+        public void setLabel(Label label) {
+            this.label = label;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
         }
     }
 
