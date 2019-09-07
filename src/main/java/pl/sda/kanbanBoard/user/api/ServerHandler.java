@@ -4,24 +4,26 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import pl.sda.kanbanBoard.user.gui.MainBoardController;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
 public class ServerHandler extends Thread{
+
+    MainBoardController mainBoardController;
     PrintWriter writer;
     Socket socket;
     BufferedReader reader;
-    @FXML
+
     TextField message;
-    @FXML
+
     Label label;
 
-    public ServerHandler(PrintWriter writer, Socket socket, BufferedReader reader, TextField message, Label label) {
-        this.writer = writer;
-        this.socket = socket;
-        this.reader = reader;
+    public ServerHandler( TextField message, Label label) {
+       //this.mainBoardController = mainBoardController;
+
         this.message = message;
         this.label = label;
 
