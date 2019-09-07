@@ -42,6 +42,7 @@ public class BasicServer {
             }
         }
     }
+
     public void send(String message){
             Iterator it = outputStreams.iterator();
             while (it.hasNext()){
