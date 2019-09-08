@@ -7,6 +7,9 @@ import pl.sda.kanbanBoard.user.gui.MainBoardController;
 import java.io.*;
 import java.net.Socket;
 
+import static pl.sda.kanbanBoard.common.ServerResponses.ALL_TASKS;
+import static pl.sda.kanbanBoard.common.ServerResponses.TASK_CREATED;
+
 public class ServerReader implements Runnable {
     MainBoardController controller;
     BufferedReader reader;
@@ -25,10 +28,12 @@ public class ServerReader implements Runnable {
         try {
             while ((line = reader.readLine()) != null) {
                 System.out.println("Readed " + line);
-
-                final String newLabel = line;
-                Platform.runLater(() -> controller.taskCreated(newLabel));
-
+                String[] split = line.split(":");
+                if (split[0].contains(TASK_CREATED)) {
+                    controller.handleTaskCreated(split[1]);
+                }else if(split[0].contains(ALL_TASKS)){
+                    controller.handleAllTasks(split[1]);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
