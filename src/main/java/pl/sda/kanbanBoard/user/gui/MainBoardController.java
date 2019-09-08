@@ -41,13 +41,14 @@ public class MainBoardController {
     }
 
     public void handleTaskCreated(String s) {
-          Button newTask = new Button(s.split(",")[1]);
+          Button newTask = new Button(s);
           toDoPane.getChildren().add(newTask);
     }
 
     public void handleAllTasks(String s) {
-        String[] tasksArray = s.split("|");
+        String[] tasksArray = s.split("\\|");
         for (String task : tasksArray) {
+
             handleTaskCreated(task);
         }
         }
