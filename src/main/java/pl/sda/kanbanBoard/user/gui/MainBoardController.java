@@ -41,7 +41,8 @@ public class MainBoardController {
     }
 
     public void handleTaskCreated(String s) {
-          Button newTask = new Button(s);
+
+          TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0]), s.split(",")[1]);
           toDoPane.getChildren().add(newTask);
     }
 
@@ -51,6 +52,6 @@ public class MainBoardController {
 
             handleTaskCreated(task);
         }
-        }
     }
+}
 
