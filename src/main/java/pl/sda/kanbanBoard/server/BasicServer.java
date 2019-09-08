@@ -13,6 +13,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static pl.sda.kanbanBoard.common.ServerRequests.CREATE_TASK;
+import static pl.sda.kanbanBoard.common.ServerRequests.GET_ALL_TASKS;
+import static pl.sda.kanbanBoard.common.ServerResponses.TASK_CREATED;
+
 public class BasicServer {
     ArrayList outputStreams;
 
@@ -37,13 +41,13 @@ public class BasicServer {
             TaskRepositoryInterface fileHandler = new TaskRepositoryImplementation();
             try {
                 while ((message = reader.readLine()) != null) {
-                    if (message.contains(ServerRequests.CREATE_TASK)) {
+                    if (message.contains(CREATE_TASK)) {
                         if (fileHandler.writeDataToFile(message)) {
-                            send(ServerResponses.TASK_CREATED + message);
+                            send(TASK_CREATED + message.split(":")[1]);
                         } else {
                             send("Task isn't creat!!!!!");
                         }
-                    } else if (message.contains(ServerRequests.GET_ALL_TASKS)) {
+                    } else if (message.contains(GET_ALL_TASKS)) {
                         String dataFromFile = fileHandler.takeDataFromFile();
                         send(dataFromFile);
                     }

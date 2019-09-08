@@ -22,6 +22,7 @@ public class MainBoardController {
     @FXML
     void createTask() {
         serverWriter.write(CREATE_TASK + newTaskName.getText());
+        newTaskName.clear();
     }
 
     private ServerWriter serverWriter;
