@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import static pl.sda.kanbanBoard.common.ServerRequests.CREATE_TASK;
 import static pl.sda.kanbanBoard.common.ServerRequests.GET_ALL_TASKS;
+import static pl.sda.kanbanBoard.common.ServerResponses.ALL_TASKS;
 import static pl.sda.kanbanBoard.common.ServerResponses.TASK_CREATED;
 
 public class BasicServer {
@@ -43,13 +44,13 @@ public class BasicServer {
                 while ((message = reader.readLine()) != null) {
                     if (message.contains(CREATE_TASK)) {
                         if (fileHandler.writeDataToFile(message)) {
-                            send(TASK_CREATED + message.split(":")[1]);
+                            send(TASK_CREATED +message.split(":")[1]);
                         } else {
                             send("Task isn't creat!!!!!");
                         }
                     } else if (message.contains(GET_ALL_TASKS)) {
                         String dataFromFile = fileHandler.takeDataFromFile();
-                        send(dataFromFile);
+                        send(ALL_TASKS +dataFromFile);
                     }
                 }
             } catch (Exception e) {
