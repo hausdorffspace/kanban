@@ -27,6 +27,7 @@ public class App extends Application {
         MainBoardController controller = loader.getController();
         ServerWriter serverWriter = new ServerWriter(socket.getOutputStream());
         controller.setServerWriter(serverWriter);
+        controller.getAllTasks();
         ServerReader serverReader = new ServerReader(controller, socket.getInputStream());
         new Thread(serverReader).start();
         Scene scene = new Scene(mainMenu);

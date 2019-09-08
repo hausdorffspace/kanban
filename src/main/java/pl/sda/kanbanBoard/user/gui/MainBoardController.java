@@ -28,10 +28,10 @@ public class MainBoardController {
 
       @FXML
     public void initialize() {
-          getAllTasks();
+
     }
 
-    private void getAllTasks(){
+    public void getAllTasks(){
           serverWriter.write(GET_ALL_TASKS);
     }
 

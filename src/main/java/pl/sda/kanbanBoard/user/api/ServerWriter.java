@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class ServerWriter {
     private final PrintWriter writer;
-    Scanner sc = new Scanner(System.in);
+
     public ServerWriter(OutputStream outputStream) {
         this.writer = new PrintWriter(outputStream);
     }
@@ -15,10 +15,6 @@ public class ServerWriter {
         writer.println(text);
         writer.flush();
     }
-    public void sendMessage(){
-        writer.println(sc);
-        System.out.println(" printed " + sc);
-        writer.flush();
-    }
+
 
 }
