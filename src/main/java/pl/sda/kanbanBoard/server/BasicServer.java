@@ -1,7 +1,5 @@
 package pl.sda.kanbanBoard.server;
 
-import pl.sda.kanbanBoard.common.ServerRequests;
-import pl.sda.kanbanBoard.common.ServerResponses;
 import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryImplementation;
 import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryInterface;
 
@@ -12,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import static pl.sda.kanbanBoard.common.ServerRequests.CREATE_TASK;
 import static pl.sda.kanbanBoard.common.ServerRequests.GET_ALL_TASKS;
@@ -24,6 +23,12 @@ public class BasicServer {
     public class ClientHandler implements Runnable {
         BufferedReader reader;
         Socket socket;
+
+        Random random = new Random();
+
+        public Integer id() {
+            return random.nextInt();
+        }
 
         public ClientHandler(Socket clientSocket) {
             try {
@@ -43,14 +48,24 @@ public class BasicServer {
             try {
                 while ((message = reader.readLine()) != null) {
                     if (message.contains(CREATE_TASK)) {
+<<<<<<< HEAD
                         if (fileHandler.writeDataToFile(message)) {
                             send(TASK_CREATED +message.split(":")[1]);
+=======
+                        Integer id = id();
+                        if (fileHandler.writeDataToFile(message, id)) {
+                            send(TASK_CREATED + id + ", " + message.split(":")[1]);
+>>>>>>> origin/Rafal
                         } else {
                             send("Task isn't creat!!!!!");
                         }
                     } else if (message.contains(GET_ALL_TASKS)) {
                         String dataFromFile = fileHandler.takeDataFromFile();
+<<<<<<< HEAD
                         send(ALL_TASKS +dataFromFile);
+=======
+                        send(ALL_TASKS + dataFromFile);
+>>>>>>> origin/Rafal
                     }
                 }
             } catch (Exception e) {
@@ -90,8 +105,6 @@ public class BasicServer {
 
     }
 
-    //TODO
-    //mylna metoda z klasy Thread,  zmienic nazwe
     public static void main(String[] args) {
         new BasicServer().start();
     }
