@@ -1,5 +1,7 @@
 package pl.sda.kanbanBoard.server;
 
+import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryImplementation;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -35,7 +37,8 @@ public class BasicServer {
                 while ((message = reader.readLine()) != null) {
                     System.out.println("Readed" + message);
                     send(message);
-
+                    TaskRepositoryImplementation taskRepositoryImplementation = new TaskRepositoryImplementation();
+                    taskRepositoryImplementation.writeDataToFile(message);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
