@@ -1,19 +1,17 @@
 package pl.sda.kanbanBoard.server.task_Repository;
 
-import jdk.nashorn.internal.runtime.JSONFunctions;
-
 import java.io.*;
+import java.util.Random;
 
 public class TaskRepositoryImplementation implements TaskRepositoryInterface {
-    public static Integer ID = 0;
+
 
     @Override
-    public boolean writeDataToFile(String message) throws IOException {
+    public boolean writeDataToFile(String message, Integer id) throws IOException {
         BufferedWriter saveToFileObject = null;
         try {
             saveToFileObject = new BufferedWriter(new FileWriter("baseData.txt", true));
-            saveToFileObject.write(ID + ", " + message.split(":")[1] + "| ");
-            ID++;
+            saveToFileObject.write(id + ", " + message.split(":")[1] + "| ");
         } catch (Exception e) {
             e.getStackTrace();
             return false;
