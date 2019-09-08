@@ -24,9 +24,25 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
 
     }
 
+
     @Override
     public String takeDataFromFile() {
+        BufferedReader takeFromFile = null;
+        try {
+            takeFromFile = new BufferedReader(new FileReader("baseData.txt" ));
+            String fileContent = takeFromFile.readLine();
+            return fileContent;
 
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+        finally {
+            try {
+                takeFromFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 }

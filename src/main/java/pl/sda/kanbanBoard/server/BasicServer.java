@@ -34,7 +34,7 @@ public class BasicServer {
             String message;
             try {
                 while ((message = reader.readLine()) != null) {
-                    System.out.println("Readed" + message);
+                    System.out.println("Readed " + message);
                     send(message);
                     TaskRepositoryInterface taskRepositoryImplementation = new TaskRepositoryImplementation();
                     taskRepositoryImplementation.writeDataToFile(message);
