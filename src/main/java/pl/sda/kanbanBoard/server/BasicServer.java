@@ -1,6 +1,5 @@
 package pl.sda.kanbanBoard.server;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryImplementation;
 import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryInterface;
 
@@ -11,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import static pl.sda.kanbanBoard.common.ServerRequests.CREATE_TASK;
 import static pl.sda.kanbanBoard.common.ServerRequests.GET_ALL_TASKS;
@@ -23,6 +23,12 @@ public class BasicServer {
     public class ClientHandler implements Runnable {
         BufferedReader reader;
         Socket socket;
+
+        Random random = new Random();
+
+        public Integer id() {
+            return random.nextInt();
+        }
 
         public ClientHandler(Socket clientSocket) {
             try {
@@ -42,8 +48,9 @@ public class BasicServer {
             try {
                 while ((message = reader.readLine()) != null) {
                     if (message.contains(CREATE_TASK)) {
-                        if (fileHandler.writeDataToFile(message)) {
-                            send(TASK_CREATED + TaskRepositoryImplementation.ID + ", " + message.split(":")[1]);
+                        Integer id = id();
+                        if (fileHandler.writeDataToFile(message, id)) {
+                            send(TASK_CREATED + id + ", " + message.split(":")[1]);
                         } else {
                             send("Task isn't creat!!!!!");
                         }
