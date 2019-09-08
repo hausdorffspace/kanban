@@ -28,7 +28,8 @@ public class MainBoardController {
     }
 
     public void taskCreated(String newLabel) {
-          label.setText(newLabel);
+          String oldLabel = label.getText();
+          label.setText(oldLabel + '\n' +newLabel);
     }
 
 
