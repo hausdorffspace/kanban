@@ -20,9 +20,7 @@ public class App extends Application {
 
 
     public void start(Stage primaryStage) throws Exception {
-
         Socket socket = new Socket("localhost", 5000);
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main_board.fxml"));
         Pane mainMenu = loader.load();
         MainBoardController controller = loader.getController();
@@ -34,6 +32,5 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("My Kanban Board");
         primaryStage.show();
-
     }
 }

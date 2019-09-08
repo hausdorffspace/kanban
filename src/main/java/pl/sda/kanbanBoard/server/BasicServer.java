@@ -1,5 +1,7 @@
 package pl.sda.kanbanBoard.server;
 
+import pl.sda.kanbanBoard.common.ServerRequests;
+import pl.sda.kanbanBoard.common.ServerResponses;
 import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryImplementation;
 import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryInterface;
 
@@ -32,12 +34,19 @@ public class BasicServer {
         @Override
         public void run() {
             String message;
+            TaskRepositoryInterface fileHandler = new TaskRepositoryImplementation();
             try {
                 while ((message = reader.readLine()) != null) {
-                    System.out.println("Readed" + message);
-                    send(message);
-                    TaskRepositoryInterface taskRepositoryImplementation = new TaskRepositoryImplementation();
-                    taskRepositoryImplementation.writeDataToFile(message);
+                    if (message.contains(ServerRequests.CREATE_TASK)) {
+                        if (fileHandler.writeDataToFile(message)) {
+                            send(ServerResponses.TASK_CREATED + message);
+                        } else {
+                            send("Task isn't creat!!!!!");
+                        }
+                    } else if (message.contains(ServerRequests.GET_ALL_TASKS)) {
+                        String dataFromFile = fileHandler.takeDataFromFile();
+                        send(dataFromFile);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -56,7 +65,6 @@ public class BasicServer {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void start() {
