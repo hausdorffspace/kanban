@@ -50,7 +50,7 @@ public class BasicServer {
                     if (message.contains(CREATE_TASK)) {
                         Integer id = id();
                         if (fileHandler.writeDataToFile(message, id)) {
-                            send(TASK_CREATED + id + ", " + message.split(":")[1]);
+                            send(TASK_CREATED + id + "," + message.split(":")[1]);
                         } else {
                             send("Task isn't creat!!!!!");
                         }
