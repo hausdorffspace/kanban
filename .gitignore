@@ -2,7 +2,7 @@
 *.class
 /target
 *.iml
-
+baseData.txt
 # Log file
 *.log
 baseData.txt
