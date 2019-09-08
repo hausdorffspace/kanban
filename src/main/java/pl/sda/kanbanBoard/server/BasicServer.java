@@ -1,5 +1,7 @@
 package pl.sda.kanbanBoard.server;
 
+import pl.sda.kanbanBoard.common.ServerRequests;
+import pl.sda.kanbanBoard.common.ServerResponses;
 import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryImplementation;
 import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryInterface;
 
@@ -10,6 +12,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import static pl.sda.kanbanBoard.common.ServerRequests.CREATE_TASK;
+import static pl.sda.kanbanBoard.common.ServerRequests.GET_ALL_TASKS;
+import static pl.sda.kanbanBoard.common.ServerResponses.TASK_CREATED;
 
 public class BasicServer {
     ArrayList outputStreams;
@@ -32,12 +38,19 @@ public class BasicServer {
         @Override
         public void run() {
             String message;
+            TaskRepositoryInterface fileHandler = new TaskRepositoryImplementation();
             try {
                 while ((message = reader.readLine()) != null) {
-                    System.out.println("Readed " + message);
-                    send(message);
-                    TaskRepositoryInterface taskRepositoryImplementation = new TaskRepositoryImplementation();
-                    taskRepositoryImplementation.writeDataToFile(message);
+                    if (message.contains(CREATE_TASK)) {
+                        if (fileHandler.writeDataToFile(message)) {
+                            send(TASK_CREATED + message.split(":")[1]);
+                        } else {
+                            send("Task isn't creat!!!!!");
+                        }
+                    } else if (message.contains(GET_ALL_TASKS)) {
+                        String dataFromFile = fileHandler.takeDataFromFile();
+                        send(dataFromFile);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -56,7 +69,6 @@ public class BasicServer {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void start() {
