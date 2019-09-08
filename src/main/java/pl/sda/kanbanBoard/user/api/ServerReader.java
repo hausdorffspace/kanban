@@ -13,10 +13,10 @@ import java.net.Socket;
 public class ServerReader implements Runnable {
     MainBoardController controller;
     BufferedReader reader;
+
     public ServerReader(MainBoardController controller, InputStream stream) {
         this.controller = controller;
         this.reader = new BufferedReader(new InputStreamReader(stream));
-
     }
 
     public BufferedReader getReader() {
@@ -28,10 +28,8 @@ public class ServerReader implements Runnable {
         try {
             while ((line = reader.readLine()) != null) {
                 System.out.println("Readed " + line);
-
                 final String newLabel = line;
                 Platform.runLater(() -> controller.taskCreated(newLabel));
-
             }
         } catch (Exception e) {
             e.printStackTrace();
