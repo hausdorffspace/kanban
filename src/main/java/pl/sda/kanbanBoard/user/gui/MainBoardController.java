@@ -30,6 +30,7 @@ public class MainBoardController {
     public void taskCreated(String newLabel) {
           String oldLabel = label.getText();
           label.setText(oldLabel + '\n' +newLabel);
+          message.clear();
     }
 
 
