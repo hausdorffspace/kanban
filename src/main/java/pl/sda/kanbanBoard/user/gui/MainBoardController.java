@@ -1,17 +1,14 @@
 package pl.sda.kanbanBoard.user.gui;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import pl.sda.kanbanBoard.user.api.ServerHandler;
 
-import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 
 
 public class MainBoardController {
