@@ -4,19 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import pl.sda.kanbanBoard.user.api.ServerHandler;
-
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-
+import pl.sda.kanbanBoard.user.api.ServerWriter;
 
 public class MainBoardController {
-
-    MainBoardController mainBoardController;
-    PrintWriter writer;
-    Socket socket;
-    BufferedReader reader;
 
     @FXML
     private Label label;
@@ -27,22 +17,24 @@ public class MainBoardController {
     @FXML
     private Button createTaskButton;
 
-    ServerHandler serverHandler = new ServerHandler(writer, socket, reader, message, label);
+    private ServerWriter serverWriter;
 
-    @FXML
+      @FXML
     public void initialize() {
-        serverHandler.configureCommunication();
-        //MainBoardController mainBoardController = this.mainBoardController;
-        Thread recieverThread = new Thread(serverHandler.getReciever());
-        recieverThread.start();
     }
 
     public void createTask() {
-        serverHandler.createTask();
+        serverWriter.createTask(message.getText());
+    }
+
+    public void taskCreated(String newLabel) {
+          String oldLabel = label.getText();
+          label.setText(oldLabel + '\n' +newLabel);
+          message.clear();
     }
 
 
-
-
-
+    public void setServerWriter(ServerWriter serverWriter) {
+        this.serverWriter = serverWriter;
+    }
 }
