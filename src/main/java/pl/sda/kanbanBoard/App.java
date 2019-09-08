@@ -15,9 +15,7 @@ import java.net.Socket;
 public class App extends Application {
     public static void main(String[] args) {
         launch(args);
-
     }
-
 
     public void start(Stage primaryStage) throws Exception {
         Socket socket = new Socket("localhost", 5000);

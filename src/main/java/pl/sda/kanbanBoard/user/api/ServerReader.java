@@ -28,7 +28,11 @@ public class ServerReader implements Runnable {
         try {
             while ((line = reader.readLine()) != null) {
                 System.out.println("Readed " + line);
-                String[] split = line.split("|");
+                String[] split = line.split("\\|");
+                System.out.println(split.length);
+                for (String s : split) {
+                    System.out.println(s);
+                }
                 if (split[0].contains(TASK_CREATED)) {
                     Platform.runLater(() ->controller.handleTaskCreated(split[1]));
                 }else if(split[0].contains(ALL_TASKS)){
