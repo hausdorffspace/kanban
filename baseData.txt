@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-0,  fdd| 1,  dsadsa| 2,  asdsa| 3,  dsfs| 4,  dsfsas| 5,  zfsddsfds| 6,  fdsffdfd| 7,  sd| 8,  5| 0,  dasda| 1,  adsad| 
-=======
-5,  zadanie 1| 6,  sdfdf| 7,  efefefe| 
->>>>>>> origin/Rafal
+5,  zadanie 1| 6,  sdfdf| 7,  efefefe| 616635209,  asd| 39407714,  asd| 1367967029,  aasdasdasd| 1965951506,  asd| -1598026434,  asd| -355160689,  asd| 2115192396,  asd| 322058419,  asd| -1844151535,  asd| 

@@ -48,24 +48,15 @@ public class BasicServer {
             try {
                 while ((message = reader.readLine()) != null) {
                     if (message.contains(CREATE_TASK)) {
-<<<<<<< HEAD
-                        if (fileHandler.writeDataToFile(message)) {
-                            send(TASK_CREATED +message.split(":")[1]);
-=======
                         Integer id = id();
                         if (fileHandler.writeDataToFile(message, id)) {
-                            send(TASK_CREATED + id + ", " + message.split(":")[1]);
->>>>>>> origin/Rafal
+                            send(TASK_CREATED + id + "," + message.split(":")[1]);
                         } else {
                             send("Task isn't creat!!!!!");
                         }
                     } else if (message.contains(GET_ALL_TASKS)) {
                         String dataFromFile = fileHandler.takeDataFromFile();
-<<<<<<< HEAD
-                        send(ALL_TASKS +dataFromFile);
-=======
                         send(ALL_TASKS + dataFromFile);
->>>>>>> origin/Rafal
                     }
                 }
             } catch (Exception e) {

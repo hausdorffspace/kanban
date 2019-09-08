@@ -28,17 +28,8 @@ public class ServerReader implements Runnable {
         try {
             while ((line = reader.readLine()) != null) {
                 System.out.println("Readed " + line);
-<<<<<<< HEAD
                 String[] split = line.split(":");
                 if (split[0].contains("TASK_CREATED")) {
-=======
-                String[] split = line.split("\\|");
-                System.out.println(split.length);
-                for (String s : split) {
-                    System.out.println(s);
-                }
-                if (split[0].contains(TASK_CREATED)) {
->>>>>>> origin/Rafal
                     Platform.runLater(() ->controller.handleTaskCreated(split[1]));
                 }else if(split[0].contains("ALL_TASKS")){
                     System.out.println();
