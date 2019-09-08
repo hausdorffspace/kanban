@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import static javax.swing.text.html.HTML.Tag.HEAD;
 import static pl.sda.kanbanBoard.common.ServerRequests.CREATE_TASK;
 import static pl.sda.kanbanBoard.common.ServerRequests.GET_ALL_TASKS;
 import static pl.sda.kanbanBoard.common.ServerResponses.ALL_TASKS;
@@ -99,6 +100,5 @@ public class BasicServer {
     public static void main(String[] args) {
         new BasicServer().start();
     }
-
 }
 
