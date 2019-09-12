@@ -42,8 +42,10 @@ public class MainBoardController {
 
     public void handleTaskCreated(String s) {
 
-          TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0].trim()), s.split(",")[1]);
-          toDoPane.getChildren().add(newTask);
+        TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0].trim()), s.split(",")[1]);
+
+        newTask.setStyle("-fx-background-color: red; -fx-opacity: 0.6");
+        toDoPane.getChildren().add(newTask);
     }
 
     public void handleAllTasks(String s) {
