@@ -1,5 +1,6 @@
 package pl.sda.kanbanBoard.server;
 
+import pl.sda.kanbanBoard.server.server_Logic.ClientHandler;
 import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryImplementation;
 import pl.sda.kanbanBoard.server.task_Repository.TaskRepositoryInterface;
 
@@ -20,51 +21,6 @@ import static pl.sda.kanbanBoard.common.ServerResponses.TASK_CREATED;
 
 public class BasicServer {
     ArrayList outputStreams;
-
-    public class ClientHandler implements Runnable {
-        BufferedReader reader;
-        Socket socket;
-
-        Random random = new Random();
-
-        public Integer id() {
-            return random.nextInt();
-        }
-
-        public ClientHandler(Socket clientSocket) {
-            try {
-                socket = clientSocket;
-                InputStreamReader isReader = new InputStreamReader(socket.getInputStream());
-                reader = new BufferedReader(isReader);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        @Override
-        public void run() {
-            String message;
-            TaskRepositoryInterface fileHandler = new TaskRepositoryImplementation();
-            try {
-                while ((message = reader.readLine()) != null) {
-                    if (message.contains(CREATE_TASK)) {
-                        Integer id = id();
-                        if (fileHandler.writeDataToFile(message, id)) {
-                            send(TASK_CREATED + id + "," + message.split(":")[1]);
-                        } else {
-                            send("Task isn't creat!!!!!");
-                        }
-                    } else if (message.contains(GET_ALL_TASKS)) {
-                        String dataFromFile = fileHandler.takeDataFromFile();
-                        send(ALL_TASKS + dataFromFile);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public void send(String message) {
         Iterator it = outputStreams.iterator();
@@ -87,7 +43,7 @@ public class BasicServer {
                 Socket clientSocket = serverSocket.accept();
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
                 outputStreams.add(writer);
-                Thread thread = new Thread(new ClientHandler(clientSocket));
+                Thread thread = new Thread(new ClientHandler(clientSocket, this));
                 thread.start();
                 System.out.println("We have connection");
             }
@@ -100,5 +56,7 @@ public class BasicServer {
     public static void main(String[] args) {
         new BasicServer().start();
     }
+
 }
+
 
