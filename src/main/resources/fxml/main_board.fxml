@@ -19,7 +19,7 @@
             <VBox prefHeight="477.0" prefWidth="283.0">
                <children>
                   <Label alignment="CENTER" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: #303030;" text="DOING" textFill="WHITE" />
-                  <VBox prefHeight="336.0" prefWidth="272.0" />
+                  <VBox fx:id="doingPane" prefHeight="417.0" prefWidth="272.0" />
                </children>
             </VBox>
             <VBox prefHeight="477.0" prefWidth="230.0">

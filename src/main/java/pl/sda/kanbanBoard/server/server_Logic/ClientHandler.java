@@ -9,10 +9,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Random;
 
-import static pl.sda.kanbanBoard.common.ServerRequests.CREATE_TASK;
-import static pl.sda.kanbanBoard.common.ServerRequests.GET_ALL_TASKS;
-import static pl.sda.kanbanBoard.common.ServerResponses.ALL_TASKS;
-import static pl.sda.kanbanBoard.common.ServerResponses.TASK_CREATED;
+import static pl.sda.kanbanBoard.common.ServerRequests.*;
+import static pl.sda.kanbanBoard.common.ServerResponses.*;
 
 public class ClientHandler implements Runnable {
     BufferedReader reader;
@@ -56,6 +54,13 @@ public class ClientHandler implements Runnable {
                 } else if (message.contains(GET_ALL_TASKS)) {
                     String dataFromFile = fileHandler.takeDataFromFile();
                     server.send(ALL_TASKS + dataFromFile);
+                }else if(message.contains(MOVE_TASK)){
+                    Integer id = id();
+                    if (fileHandler.writeDataToFile(message, id)){
+                        server.send(TASK_MOVED + id + "," + message.split(":")[1]);
+                    }else{
+                        server.send("Task NOT moved!");
+                    }
                 }
             }
         } catch (Exception e) {

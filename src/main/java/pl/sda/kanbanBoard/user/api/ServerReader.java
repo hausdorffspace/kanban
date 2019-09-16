@@ -34,6 +34,8 @@ public class ServerReader implements Runnable {
                 }else if(split[0].contains("ALL_TASKS")){
                     System.out.println();
                     Platform.runLater(()->controller.handleAllTasks(split[1]));
+                }else if(split[0].contains("MOVED_TASK")){
+                    Platform.runLater(() -> controller.handleTaskMoved(split[1]));
                 }
             }
         } catch (Exception e) {

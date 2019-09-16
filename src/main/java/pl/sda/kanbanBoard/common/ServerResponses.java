@@ -3,7 +3,7 @@ package pl.sda.kanbanBoard.common;
 public class ServerResponses {
     public static String TASK_CREATED = "TASK_CREATED:";
     public static String ALL_TASKS = "ALL_TASKS:";
-
+    public static String TASK_MOVED = "TASK_MOVED: ";
 
     /*
     All Tasks := ALL_TASKS:{LIST_OF_TASKS}
