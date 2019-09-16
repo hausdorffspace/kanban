@@ -13,11 +13,12 @@ import static pl.sda.kanbanBoard.common.ServerRequests.GET_ALL_TASKS;
 
 public class MainBoardController {
 
+    private ServerWriter serverWriter;
     @FXML
     private VBox toDoPane;
-
     @FXML
     private TextField newTaskName;
+
 
     @FXML
     void createTask() {
@@ -25,15 +26,13 @@ public class MainBoardController {
         newTaskName.clear();
     }
 
-    private ServerWriter serverWriter;
-
-      @FXML
+    @FXML
     public void initialize() {
 
     }
 
     public void getAllTasks(){
-          serverWriter.write(GET_ALL_TASKS);
+        serverWriter.write(GET_ALL_TASKS);
     }
 
     public void setServerWriter(ServerWriter serverWriter) {
@@ -41,12 +40,11 @@ public class MainBoardController {
     }
 
     public void handleTaskCreated(String s) {
-
-          TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0].trim()), s.split(",")[1]);
-          newTask.setStyle("-fx-background-color:red; -fx-opacity: 0.8;");
-          newTask.setPrefWidth(200);
-          newTask.setPrefHeight(100);
-          toDoPane.getChildren().add(newTask);
+        TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0].trim()), s.split(",")[1]);
+        newTask.setStyle("-fx-background-color:red; -fx-opacity: 0.8;");
+        newTask.setPrefWidth(200);
+        newTask.setPrefHeight(100);
+        toDoPane.getChildren().add(newTask);
     }
 
     public void handleAllTasks(String s) {
@@ -56,5 +54,6 @@ public class MainBoardController {
             handleTaskCreated(task);
         }
     }
+
 }
 
