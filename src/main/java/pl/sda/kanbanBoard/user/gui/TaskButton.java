@@ -13,8 +13,5 @@ public class TaskButton extends Button {
     public TaskButton(int i, String s) {
         super(s);
         this.id = i;
-
-
-
     }
 }

@@ -1,6 +1,6 @@
 package pl.sda.kanbanBoard.user.gui;
 
-import javafx.application.Platform;
+import javafx.application   .Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -42,10 +42,11 @@ public class MainBoardController {
 
     public void handleTaskCreated(String s) {
 
-        TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0].trim()), s.split(",")[1]);
-
-        newTask.setStyle("-fx-background-color: red; -fx-opacity: 0.6");
-        toDoPane.getChildren().add(newTask);
+          TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0].trim()), s.split(",")[1]);
+          newTask.setStyle("-fx-background-color:red; -fx-opacity: 0.8;");
+          newTask.setPrefWidth(200);
+          newTask.setPrefHeight(100);
+          toDoPane.getChildren().add(newTask);
     }
 
     public void handleAllTasks(String s) {
