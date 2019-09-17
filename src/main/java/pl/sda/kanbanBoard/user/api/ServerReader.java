@@ -30,12 +30,15 @@ public class ServerReader implements Runnable {
                 System.out.println("Readed " + line);
                 String[] split = line.split(":");
                 if (split[0].contains("TASK_CREATED")) {
+
                     Platform.runLater(() ->controller.handleTaskCreated(split[1]));
                 }else if(split[0].contains("ALL_TASKS")){
+
                     System.out.println();
                     Platform.runLater(()->controller.handleAllTasks(split[1]));
-                }else if(split[0].contains("MOVED_TASK")){
-                    Platform.runLater(() -> controller.handleTaskMoved(split[1]));
+                }else if(split[0].contains("TASK_MOVED")){
+
+                    Platform.runLater(() -> controller.handleTaskCreated(split[1]));
                 }
             }
         } catch (Exception e) {

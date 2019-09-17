@@ -20,18 +20,19 @@ public class MainBoardController {
     private VBox toDoPane;
     @FXML
     private VBox doingPane;
+
     @FXML
     private TextField newTaskName;
 
     Dragboard db;
     Dragboard db1;
 
-    void moveTask(Dragboard db){
-        serverWriter.write(MOVE_TASK + db.getString() );
+    void moveTasktoDoing(Dragboard db){
+        serverWriter.write(MOVE_TASK + db.getString()+".1");
     }
     @FXML
     void createTask() {
-        serverWriter.write(CREATE_TASK + newTaskName.getText());
+        serverWriter.write(CREATE_TASK + newTaskName.getText()+".0");
         newTaskName.clear();
     }
 
@@ -55,7 +56,8 @@ public class MainBoardController {
                 db = event.getDragboard();
                 boolean success = false;
                 if (db.hasString()){
-                    moveTask(db);
+                    moveTasktoDoing(db);
+                    db = null;
                     /*TaskButton task = new TaskButton(1, db.getString());
                     task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
                     task.setPrefWidth(200);
@@ -87,22 +89,36 @@ public class MainBoardController {
     public void setServerWriter(ServerWriter serverWriter) {
         this.serverWriter = serverWriter;
     }
+    //adding to task string the number of pane where it belnogs... 0 ->ToDO, 1->Doing, 2->done
+
     public void handleTaskMoved(String s){
-        TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0].trim()), s.split(",")[1]);
+        TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0].trim()), s.split(",")[1].split(".")[0] ,Integer.parseInt(s.split(".")[1]));
         newTask.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
-        newTask.setPrefWidth(200);
+        newTask.setPrefWidth(100);
         newTask.setPrefHeight(100);
         doingPane.getChildren().add(newTask);
-
+        System.out.println("handled move task (added)");
     }
+    //IF THIS WORKS FOR CREATION OF NEW TASK WHY IT DOESNT WORKS FOR MOVING?? IF ATER RESTART ALL MOVED TASKS ARE VISIBLE AND ARE HANDLED...????
 
     public void handleTaskCreated(String s) {
-        TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0].trim()), s.split(",")[1]);
-        newTask.setStyle("-fx-background-color:red; -fx-opacity: 0.8;");
-        newTask.setPrefWidth(200);
-        newTask.setPrefHeight(100);
-        toDoPane.getChildren().add(newTask);
-
+        Integer taskId = Integer.parseInt(s.split(",")[0].trim());
+        String taskTxt = s.split(",")[1].split("\\.")[0];
+        Integer taskStatus = Integer.parseInt(s.split("\\.")[1]);
+        TaskButton newTask = new TaskButton(taskId,taskTxt ,taskStatus);
+        if(taskStatus == 0) {
+            newTask.setStyle("-fx-background-color:red; -fx-opacity: 0.8;");
+            newTask.setPrefWidth(200);
+            newTask.setPrefHeight(100);
+            toDoPane.getChildren().add(newTask);
+            System.out.println("handled task created(added)");
+        }else if(taskStatus ==1){
+            newTask.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
+            newTask.setPrefWidth(200);
+            newTask.setPrefHeight(100);
+            doingPane.getChildren().add(newTask);
+            System.out.println("handled move task (added)");
+        }
         //Drag and drop button handling
 
         newTask.setOnDragDetected(new EventHandler<MouseEvent>() {
@@ -112,7 +128,7 @@ public class MainBoardController {
                 ClipboardContent content = new ClipboardContent();
                 content.putString(newTask.getText());
                 db1.setContent(content);
-
+                System.out.println("mouse dragged");
                 event.consume();
             }
         });
@@ -121,8 +137,10 @@ public class MainBoardController {
     public void handleAllTasks(String s) {
         String[] tasksArray = s.split("\\|");
         for (String task : tasksArray) {
-            handleTaskMoved(task);
+           // handleTaskMoved(task);
+           // System.out.println("handled move task");
             handleTaskCreated(task);
+            System.out.println("handled some task");
         }
     }
 
