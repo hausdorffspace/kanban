@@ -12,6 +12,7 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
         try {
             saveToFileObject = new BufferedWriter(new FileWriter("baseData.txt", true));
             saveToFileObject.write(id + "," + message.split(":")[1] + "|");
+            System.out.println("task written to file ");
         } catch (Exception e) {
             e.getStackTrace();
             return false;

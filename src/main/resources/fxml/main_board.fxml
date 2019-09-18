@@ -25,7 +25,7 @@
             <VBox prefHeight="477.0" prefWidth="230.0">
                <children>
                   <Label alignment="CENTER" prefHeight="60.0" prefWidth="219.0" style="-fx-background-color: #303030;" text="DONE" textFill="WHITE" />
-                  <VBox prefHeight="351.0" prefWidth="219.0" />
+                  <VBox fx:id="donePane" prefHeight="351.0" prefWidth="219.0" />
                </children>
             </VBox>
          </children>

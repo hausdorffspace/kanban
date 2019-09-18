@@ -48,6 +48,7 @@ public class ClientHandler implements Runnable {
                     Integer id = id();
                     if (fileHandler.writeDataToFile(message, id)) {
                         server.send(TASK_CREATED + id + "," + message.split(":")[1]);
+                        System.out.println("sending to server");
                     } else {
                         server.send("Task isn't created!!!!!");
                     }
