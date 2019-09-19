@@ -23,7 +23,9 @@ public class MainBoardController {
 
     Dragboard db;
     Dragboard db1;
-
+    void moveTasktoToDo(Dragboard db) {
+        serverWriter.write(MOVE_TASK + db.getString() + ".0");
+    }
     void moveTasktoDoing(Dragboard db) {
         serverWriter.write(MOVE_TASK + db.getString() + ".1");
     }
@@ -42,6 +44,35 @@ public class MainBoardController {
     public void initialize() {
 
         // Drag and drop handling for panes.
+        toDoPane.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                if (event.getGestureSource() != doingPane &&
+                        event.getDragboard().hasString()) {
+                    event.acceptTransferModes(TransferMode.ANY);
+                }
+                event.consume();
+            }
+        });
+        toDoPane.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                db = event.getDragboard();
+                boolean success = false;
+                if (db.hasString()) {
+                    moveTasktoToDo(db);
+                    db = null;
+                    /*TaskButton task = new TaskButton(1, db.getString());
+                    task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
+                    task.setPrefWidth(200);
+                    task.setPrefHeight(100);
+                    doingPane.getChildren().add(task);*/
+                    success = true;
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
         doingPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
