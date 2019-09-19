@@ -31,5 +31,6 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("My Kanban Board");
         primaryStage.show();
+        //pusz
     }
 }
