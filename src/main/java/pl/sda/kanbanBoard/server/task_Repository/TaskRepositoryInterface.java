@@ -5,6 +5,6 @@ import java.io.IOException;
 
 public interface TaskRepositoryInterface {
     boolean writeDataToFile(String message, Integer id) throws IOException;
-    void deleteDataFromFile();
+    boolean deleteDataFromFile(String s);
     String takeDataFromFile();
 }

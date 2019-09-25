@@ -59,9 +59,18 @@ public class ClientHandler implements Runnable {
                     Integer id = id();
                     if (fileHandler.writeDataToFile(message, id)){
                         server.send(TASK_MOVED + id + "," + message.split(":")[1]);
+                      //  if (fileHandler.deleteDataFromFile(message)){
+
+                       // }
                     }else{
                         server.send("Task NOT moved!");
                     }
+                }else if(message.contains(DELETE_TASK)) {
+                    if(fileHandler.deleteDataFromFile(message)){
+                        server.send(TASK_DELETED + message.split(":")[1]);
+                        System.out.println("task deleteeeeed");
+                    }
+
                 }
             }
         } catch (Exception e) {

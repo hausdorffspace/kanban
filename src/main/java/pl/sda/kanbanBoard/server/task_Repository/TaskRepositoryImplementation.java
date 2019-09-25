@@ -23,7 +23,43 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
     }
 
     @Override
-    public void deleteDataFromFile() {
+    public boolean deleteDataFromFile(String s) {
+        Random rd = new Random();
+
+        String data = takeDataFromFile();
+        String taskToDelete = s.split(":")[1].trim();
+        String[] taskArray = data.split("\\|", 1000);
+        for (int i = 0; i < taskArray.length ; i++) {
+            if(taskArray[i].contains(taskToDelete)){
+                taskArray[i] ="";
+                System.out.println(" TASK DELITED");
+            }else {
+                try {
+                    writeDataToFile(taskArray[i], rd.nextInt() );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        String newData = convertArrayToString(taskArray);
+        System.out.println(newData);
+        PrintWriter pw;
+        // BufferedReader object for input.txt
+        BufferedReader br1;
+        try {
+           /* File file = new File("baseData.txt");
+            file.delete();*/
+
+
+           /*   pw = new PrintWriter("baseData.txt");
+            pw.println(newData);
+
+            pw.close();*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("File operation performed successfully");
+        return true;
 
     }
 
@@ -46,6 +82,14 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
             }
         }
         return null;
+    }
+    public static String convertArrayToString(String[] strArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < strArray.length; i++) {
+            stringBuilder.append(strArray[i]);
+
+        }
+        return stringBuilder.toString();
     }
 
 }

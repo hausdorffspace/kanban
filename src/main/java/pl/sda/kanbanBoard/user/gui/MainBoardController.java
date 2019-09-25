@@ -33,6 +33,16 @@ public class MainBoardController {
     void moveTasktoDone(Dragboard db) {
         serverWriter.write(MOVE_TASK + db.getString() + ".2");
     }
+    void deleteTaskFromToDo(Dragboard db){
+        serverWriter.write(DELETE_TASK + db.getString() + ".0");
+        System.out.println("widzi TODO PANE");
+    }
+    void deleteTaskFromDoing(Dragboard db){
+        serverWriter.write(DELETE_TASK + db.getString() + ".1");
+    }
+    void deleteTaskFromDone(Dragboard db){
+        serverWriter.write(DELETE_TASK + db.getString() + ".2");
+    }
 
     @FXML
     void createTask() {
@@ -141,17 +151,6 @@ public class MainBoardController {
     public void setServerWriter(ServerWriter serverWriter) {
         this.serverWriter = serverWriter;
     }
-    //adding to task string the number of pane where it belnogs... 0 ->ToDO, 1->Doing, 2->done
-
-    public void handleTaskMoved(String s) {
-        TaskButton newTask = new TaskButton(Integer.parseInt(s.split(",")[0].trim()), s.split(",")[1].split(".")[0], Integer.parseInt(s.split(".")[1]));
-        newTask.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
-        newTask.setPrefWidth(100);
-        newTask.setPrefHeight(100);
-        doingPane.getChildren().add(newTask);
-        System.out.println("handled move task (added)");
-    }
-    //IF THIS WORKS FOR CREATION OF NEW TASK WHY IT DOESNT WORKS FOR MOVING?? IF ATER RESTART ALL MOVED TASKS ARE VISIBLE AND ARE HANDLED...????
 
     public void handleTask(String s) {
         Integer taskId = Integer.parseInt(s.split(",")[0].trim());
@@ -188,6 +187,13 @@ public class MainBoardController {
                     content.putString(newTask.getText());
                     db1.setContent(content);
                     System.out.println("mouse dragged");
+                    if (newTask.getParent()==toDoPane)
+                        deleteTaskFromToDo(db1);
+                    else if(newTask.getParent()==doingPane)
+                        deleteTaskFromDoing(db1);
+                    else if(newTask.getParent()==donePane)
+                        deleteTaskFromDone(db1);
+
                     event.consume();
                 }
             });
