@@ -1,5 +1,6 @@
 package pl.sda.kanbanBoard.user.gui;
 
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -20,6 +21,8 @@ public class MainBoardController {
     private VBox donePane;
     @FXML
     private TextField newTaskName;
+
+    private TaskButton taskContainer;
 
     Dragboard db;
     Dragboard db1;
@@ -72,6 +75,12 @@ public class MainBoardController {
                 if (db.hasString()) {
                     moveTasktoToDo(db);
                     db = null;
+                    if (taskContainer.getParent()==toDoPane)
+                        deleteTaskFromToDo(db1);
+                    else if(taskContainer.getParent()==doingPane)
+                        deleteTaskFromDoing(db1);
+                    else if(taskContainer.getParent()==donePane)
+                        deleteTaskFromDone(db1);
                     /*TaskButton task = new TaskButton(1, db.getString());
                     task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
                     task.setPrefWidth(200);
@@ -101,6 +110,12 @@ public class MainBoardController {
                 if (db.hasString()) {
                     moveTasktoDoing(db);
                     db = null;
+                    if (taskContainer.getParent()==toDoPane)
+                        deleteTaskFromToDo(db1);
+                    else if(taskContainer.getParent()==doingPane)
+                        deleteTaskFromDoing(db1);
+                    else if(taskContainer.getParent()==donePane)
+                        deleteTaskFromDone(db1);
                     /*TaskButton task = new TaskButton(1, db.getString());
                     task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
                     task.setPrefWidth(200);
@@ -130,6 +145,13 @@ public class MainBoardController {
                 if (db.hasString()) {
                     moveTasktoDone(db);
                     db = null;
+
+                    if (taskContainer.getParent()==toDoPane)
+                        deleteTaskFromToDo(db1);
+                    else if(taskContainer.getParent()==doingPane)
+                        deleteTaskFromDoing(db1);
+                    else if(taskContainer.getParent()==donePane)
+                        deleteTaskFromDone(db1);
                     /*TaskButton task = new TaskButton(1, db.getString());
                     task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
                     task.setPrefWidth(200);
@@ -187,12 +209,15 @@ public class MainBoardController {
                     content.putString(newTask.getText());
                     db1.setContent(content);
                     System.out.println("mouse dragged");
-                    if (newTask.getParent()==toDoPane)
+                    taskContainer = newTask;
+
+
+                   /* if (newTask.getParent()==toDoPane)
                         deleteTaskFromToDo(db1);
                     else if(newTask.getParent()==doingPane)
                         deleteTaskFromDoing(db1);
                     else if(newTask.getParent()==donePane)
-                        deleteTaskFromDone(db1);
+                        deleteTaskFromDone(db1);*/
 
                     event.consume();
                 }

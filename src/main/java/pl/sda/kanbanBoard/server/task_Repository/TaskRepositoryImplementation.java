@@ -3,6 +3,9 @@ package pl.sda.kanbanBoard.server.task_Repository;
 import java.io.*;
 import java.util.Random;
 
+import static pl.sda.kanbanBoard.common.ServerRequests.DELETE_TASK;
+import static pl.sda.kanbanBoard.common.ServerRequests.MOVE_TASK;
+
 public class TaskRepositoryImplementation implements TaskRepositoryInterface {
 
 
@@ -11,7 +14,23 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
         BufferedWriter saveToFileObject = null;
         try {
             saveToFileObject = new BufferedWriter(new FileWriter("baseData.txt", true));
-            saveToFileObject.write(id + "," + message.split(":")[1] + "|");
+            String task = message.split(":")[1];
+            saveToFileObject.write(id + "," + task + "|");
+            System.out.println("task written to file ");
+        } catch (Exception e) {
+            e.getStackTrace();
+            return false;
+        } finally {
+            saveToFileObject.close();
+            return true;
+        }
+    }
+    public boolean deleteData() throws IOException {
+        BufferedWriter saveToFileObject = null;
+        try {
+            saveToFileObject = new BufferedWriter(new FileWriter("newData.txt"));
+
+            saveToFileObject.write("");
             System.out.println("task written to file ");
         } catch (Exception e) {
             e.getStackTrace();
@@ -29,13 +48,18 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
         String data = takeDataFromFile();
         String taskToDelete = s.split(":")[1].trim();
         String[] taskArray = data.split("\\|", 1000);
-        for (int i = 0; i < taskArray.length ; i++) {
+        for (int i = 0; i < taskArray.length -1 ; i++) {
             if(taskArray[i].contains(taskToDelete)){
-                taskArray[i] ="";
+                taskArray[i] = null;
                 System.out.println(" TASK DELITED");
             }else {
                 try {
-                    writeDataToFile(taskArray[i], rd.nextInt() );
+                    if(i ==0 ){
+                    deleteData();
+                    }
+                    String taskToWrite = taskArray[i].split(",")[1].trim();
+                    writeDataToFile(MOVE_TASK + taskToWrite, rd.nextInt() );
+                    System.out.println("writting task nr: " + taskToWrite );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
