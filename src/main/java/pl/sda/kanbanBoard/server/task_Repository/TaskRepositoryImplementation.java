@@ -57,6 +57,10 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
                 }
             } else {
                 try {
+                    if(i ==0 ){
+                        File baseData = new File("baseData.txt");
+                        baseData.delete();
+                    }
 
                     String taskToWrite = taskArray[i].split(",")[1].trim();
 

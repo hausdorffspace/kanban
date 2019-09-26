@@ -67,7 +67,7 @@ public class ClientHandler implements Runnable {
                     }
                 }else if(message.contains(DELETE_TASK)) {
                     if(fileHandler.deleteDataFromFile(message)){
-                        server.send(TASK_DELETED + message.split(":")[1]);
+                        server.send(TASK_DELETED + fileHandler.takeDataFromFile());
 
                     }
 

@@ -3,6 +3,7 @@ package pl.sda.kanbanBoard.user.gui;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
@@ -24,6 +25,18 @@ public class MainBoardController {
 
     private TaskButton taskContainer;
 
+    public VBox getToDoPane() {
+        return toDoPane;
+    }
+
+    public VBox getDoingPane() {
+        return doingPane;
+    }
+
+    public VBox getDonePane() {
+        return donePane;
+    }
+
     Dragboard db;
     Dragboard db1;
     void moveTasktoToDo(Dragboard db) {
@@ -40,8 +53,20 @@ public class MainBoardController {
     void deleteTaskFromDoing(Dragboard db){
         serverWriter.write(DELETE_TASK + db.getString() + ".1");
     }
-    void deleteTaskFromDone(Dragboard db){
-        serverWriter.write(DELETE_TASK + db.getString() + ".2");
+    void deleteTaskFromDone(Dragboard db){ serverWriter.write(DELETE_TASK + db.getString() + ".2"); }
+
+    void deleteTask(Parent parent){
+        if (parent==toDoPane) {
+            deleteTaskFromToDo(db1);
+
+        }
+        else if(parent==doingPane){
+            deleteTaskFromDoing(db1);
+        }
+        else if(parent==donePane){
+            deleteTaskFromDone(db1);
+
+        }
     }
 
     @FXML
@@ -72,18 +97,7 @@ public class MainBoardController {
                 if (db.hasString()) {
                     moveTasktoToDo(db);
                     db = null;
-                   if (taskContainer.getParent()==toDoPane)
-                        deleteTaskFromToDo(db1);
-                    else if(taskContainer.getParent()==doingPane)
-                        deleteTaskFromDoing(db1);
-                    else if(taskContainer.getParent()==donePane)
-                        deleteTaskFromDone(db1);
-                   // getAllTasks();
-                    /*TaskButton task = new TaskButton(1, db.getString());
-                    task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
-                    task.setPrefWidth(200);
-                    task.setPrefHeight(100);
-                    doingPane.getChildren().add(task);*/
+                    deleteTask(taskContainer.getParent());
                     success = true;
                 }
                 event.setDropCompleted(success);
@@ -108,18 +122,10 @@ public class MainBoardController {
                 if (db.hasString()) {
                     moveTasktoDoing(db);
                     db = null;
-                    if (taskContainer.getParent()==toDoPane)
-                        deleteTaskFromToDo(db1);
-                    else if(taskContainer.getParent()==doingPane)
-                        deleteTaskFromDoing(db1);
-                    else if(taskContainer.getParent()==donePane)
-                        deleteTaskFromDone(db1);
-                   // getAllTasks();
-                    /*TaskButton task = new TaskButton(1, db.getString());
-                    task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
-                    task.setPrefWidth(200);
-                    task.setPrefHeight(100);
-                    doingPane.getChildren().add(task);*/
+                    deleteTask(taskContainer.getParent());
+
+
+
                     success = true;
                 }
                 event.setDropCompleted(success);
@@ -144,20 +150,9 @@ public class MainBoardController {
                 if (db.hasString()) {
                     moveTasktoDone(db);
                     db = null;
-
-                   if (taskContainer.getParent()==toDoPane)
-                        deleteTaskFromToDo(db1);
-                    else if(taskContainer.getParent()==doingPane)
-                        deleteTaskFromDoing(db1);
-                    else if(taskContainer.getParent()==donePane)
-                        deleteTaskFromDone(db1);
+                    deleteTask(taskContainer.getParent());
 
                    // getAllTasks();
-                    /*TaskButton task = new TaskButton(1, db.getString());
-                    task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
-                    task.setPrefWidth(200);
-                    task.setPrefHeight(100);
-                    doingPane.getChildren().add(task);*/
                     success = true;
                 }
                 event.setDropCompleted(success);
@@ -211,15 +206,6 @@ public class MainBoardController {
                     db1.setContent(content);
                     System.out.println("mouse dragged");
                     taskContainer = newTask;
-
-
-                   /* if (newTask.getParent()==toDoPane)
-                        deleteTaskFromToDo(db1);
-                    else if(newTask.getParent()==doingPane)
-                        deleteTaskFromDoing(db1);
-                    else if(newTask.getParent()==donePane)
-                        deleteTaskFromDone(db1);*/
-
                     event.consume();
                 }
             });
