@@ -37,7 +37,7 @@ public class ServerReader implements Runnable {
                 }
                 else if(split[0].contains("TASK_DELETED"))
                     System.out.println("TASK DELETED coś");
-                    // Platform.runLater(() -> controller.handleAllTasks(split[1]));
+                   // Platform.runLater(() -> controller.handleAllTasks(split[1]));
             }
         } catch (Exception e) {
             e.printStackTrace();

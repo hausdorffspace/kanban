@@ -43,7 +43,7 @@ public class ClientHandler implements Runnable {
         String message;
         TaskRepositoryInterface fileHandler = new TaskRepositoryImplementation();
         try {
-            while ((message = reader.readLine()) != null) {
+            while ((message = reader.readLine()) != null) {   
                 if (message.contains(CREATE_TASK)) {
                     Integer id = id();
                     if (fileHandler.writeDataToFile(message, id)) {
@@ -68,7 +68,7 @@ public class ClientHandler implements Runnable {
                 }else if(message.contains(DELETE_TASK)) {
                     if(fileHandler.deleteDataFromFile(message)){
                         server.send(TASK_DELETED + message.split(":")[1]);
-                        System.out.println("task deleteeeeed");
+
                     }
 
                 }

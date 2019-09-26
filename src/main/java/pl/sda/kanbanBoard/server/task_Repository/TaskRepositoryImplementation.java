@@ -3,8 +3,7 @@ package pl.sda.kanbanBoard.server.task_Repository;
 import java.io.*;
 import java.util.Random;
 
-import static pl.sda.kanbanBoard.common.ServerRequests.DELETE_TASK;
-import static pl.sda.kanbanBoard.common.ServerRequests.MOVE_TASK;
+import static pl.sda.kanbanBoard.common.ServerRequests.*;
 
 public class TaskRepositoryImplementation implements TaskRepositoryInterface {
 
@@ -52,36 +51,25 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
             if(taskArray[i].contains(taskToDelete)){
                 taskArray[i] = null;
                 System.out.println(" TASK DELITED");
-            }else {
+                if(i ==0 ){
+                    File baseData = new File("baseData.txt");
+                    baseData.delete();
+                }
+            } else {
                 try {
-                    if(i ==0 ){
-                    deleteData();
-                    }
+
                     String taskToWrite = taskArray[i].split(",")[1].trim();
-                    writeDataToFile(MOVE_TASK + taskToWrite, rd.nextInt() );
+
+
+                       System.out.println("deleted");
+                    writeDataToFile(CREATE_TASK + taskToWrite, rd.nextInt() );
                     System.out.println("writting task nr: " + taskToWrite );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
-        String newData = convertArrayToString(taskArray);
-        System.out.println(newData);
-        PrintWriter pw;
-        // BufferedReader object for input.txt
-        BufferedReader br1;
-        try {
-           /* File file = new File("baseData.txt");
-            file.delete();*/
 
-
-           /*   pw = new PrintWriter("baseData.txt");
-            pw.println(newData);
-
-            pw.close();*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         System.out.println("File operation performed successfully");
         return true;
 

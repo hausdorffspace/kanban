@@ -32,14 +32,11 @@ public class MainBoardController {
     void moveTasktoDoing(Dragboard db) {
         serverWriter.write(MOVE_TASK + db.getString() + ".1");
     }
-
     void moveTasktoDone(Dragboard db) {
         serverWriter.write(MOVE_TASK + db.getString() + ".2");
     }
-    void deleteTaskFromToDo(Dragboard db){
-        serverWriter.write(DELETE_TASK + db.getString() + ".0");
-        System.out.println("widzi TODO PANE");
-    }
+
+    void deleteTaskFromToDo(Dragboard db){ serverWriter.write(DELETE_TASK + db.getString() + ".0"); }
     void deleteTaskFromDoing(Dragboard db){
         serverWriter.write(DELETE_TASK + db.getString() + ".1");
     }
@@ -75,12 +72,13 @@ public class MainBoardController {
                 if (db.hasString()) {
                     moveTasktoToDo(db);
                     db = null;
-                    if (taskContainer.getParent()==toDoPane)
+                   if (taskContainer.getParent()==toDoPane)
                         deleteTaskFromToDo(db1);
                     else if(taskContainer.getParent()==doingPane)
                         deleteTaskFromDoing(db1);
                     else if(taskContainer.getParent()==donePane)
                         deleteTaskFromDone(db1);
+                   // getAllTasks();
                     /*TaskButton task = new TaskButton(1, db.getString());
                     task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
                     task.setPrefWidth(200);
@@ -116,6 +114,7 @@ public class MainBoardController {
                         deleteTaskFromDoing(db1);
                     else if(taskContainer.getParent()==donePane)
                         deleteTaskFromDone(db1);
+                   // getAllTasks();
                     /*TaskButton task = new TaskButton(1, db.getString());
                     task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
                     task.setPrefWidth(200);
@@ -146,12 +145,14 @@ public class MainBoardController {
                     moveTasktoDone(db);
                     db = null;
 
-                    if (taskContainer.getParent()==toDoPane)
+                   if (taskContainer.getParent()==toDoPane)
                         deleteTaskFromToDo(db1);
                     else if(taskContainer.getParent()==doingPane)
                         deleteTaskFromDoing(db1);
                     else if(taskContainer.getParent()==donePane)
                         deleteTaskFromDone(db1);
+
+                   // getAllTasks();
                     /*TaskButton task = new TaskButton(1, db.getString());
                     task.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
                     task.setPrefWidth(200);
