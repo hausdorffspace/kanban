@@ -1,6 +1,5 @@
 package pl.sda.kanbanBoard.user.gui;
 
-import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -8,6 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import pl.sda.kanbanBoard.user.api.ServerWriter;
+
+import java.util.List;
 
 import static pl.sda.kanbanBoard.common.ServerRequests.*;
 
@@ -37,8 +38,8 @@ public class MainBoardController {
         return donePane;
     }
 
-    Dragboard db;
-    Dragboard db1;
+    Dragboard PaneDragBoard;
+    Dragboard taskDragBoard;
     void moveTasktoToDo(Dragboard db) {
         serverWriter.write(MOVE_TASK + db.getString() + ".0");
     }
@@ -57,14 +58,14 @@ public class MainBoardController {
 
     void deleteTask(Parent parent){
         if (parent==toDoPane) {
-            deleteTaskFromToDo(db1);
+            deleteTaskFromToDo(taskDragBoard);
 
         }
         else if(parent==doingPane){
-            deleteTaskFromDoing(db1);
+            deleteTaskFromDoing(taskDragBoard);
         }
         else if(parent==donePane){
-            deleteTaskFromDone(db1);
+            deleteTaskFromDone(taskDragBoard);
 
         }
     }
@@ -83,8 +84,8 @@ public class MainBoardController {
             @Override
             public void handle(DragEvent event) {
                 if (event.getGestureSource() != doingPane &&
-                        event.getDragboard().hasString()) {
-                    event.acceptTransferModes(TransferMode.ANY);
+                        event.getDragboard().hasString()&&! toDoPane.getChildren().contains(taskContainer)) {
+                    event.acceptTransferModes(TransferMode.MOVE);
                 }
                 event.consume();
             }
@@ -92,11 +93,11 @@ public class MainBoardController {
         toDoPane.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
-                db = event.getDragboard();
+                PaneDragBoard = event.getDragboard();
                 boolean success = false;
-                if (db.hasString()) {
-                    moveTasktoToDo(db);
-                    db = null;
+                if (PaneDragBoard.hasString()) {
+                    moveTasktoToDo(PaneDragBoard);
+                    PaneDragBoard = null;
                     deleteTask(taskContainer.getParent());
                     success = true;
                 }
@@ -108,8 +109,8 @@ public class MainBoardController {
             @Override
             public void handle(DragEvent event) {
                 if (event.getGestureSource() != doingPane &&
-                        event.getDragboard().hasString()) {
-                    event.acceptTransferModes(TransferMode.ANY);
+                        event.getDragboard().hasString()&& !doingPane.getChildren().contains(taskContainer)) {
+                    event.acceptTransferModes(TransferMode.MOVE);
                 }
                 event.consume();
             }
@@ -117,11 +118,11 @@ public class MainBoardController {
         doingPane.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
-                db = event.getDragboard();
+                PaneDragBoard = event.getDragboard();
                 boolean success = false;
-                if (db.hasString()) {
-                    moveTasktoDoing(db);
-                    db = null;
+                if (PaneDragBoard.hasString() ) {
+                    moveTasktoDoing(PaneDragBoard);
+                    PaneDragBoard = null;
                     deleteTask(taskContainer.getParent());
 
 
@@ -136,8 +137,8 @@ public class MainBoardController {
             @Override
             public void handle(DragEvent event) {
                 if (event.getGestureSource() != donePane &&
-                        event.getDragboard().hasString()) {
-                    event.acceptTransferModes(TransferMode.ANY);
+                        event.getDragboard().hasString()&& !donePane.getChildren().contains(taskContainer)) {
+                    event.acceptTransferModes(TransferMode.MOVE);
                 }
                 event.consume();
             }
@@ -145,18 +146,21 @@ public class MainBoardController {
         donePane.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
-                db = event.getDragboard();
-                boolean success = false;
-                if (db.hasString()) {
-                    moveTasktoDone(db);
-                    db = null;
-                    deleteTask(taskContainer.getParent());
 
-                   // getAllTasks();
-                    success = true;
-                }
-                event.setDropCompleted(success);
-                event.consume();
+                    PaneDragBoard = event.getDragboard();
+                    boolean success = false;
+                    if (PaneDragBoard.hasString()) {
+                        moveTasktoDone(PaneDragBoard);
+                        PaneDragBoard = null;
+                        deleteTask(taskContainer.getParent());
+
+                        // getAllTasks();
+                        success = true;
+                    }
+
+                    event.setDropCompleted(success);
+                    event.consume();
+
             }
         });
 
@@ -200,10 +204,10 @@ public class MainBoardController {
             newTask.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    db1 = newTask.startDragAndDrop(TransferMode.MOVE);
+                    taskDragBoard = newTask.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
                     content.putString(newTask.getText());
-                    db1.setContent(content);
+                    taskDragBoard.setContent(content);
                     System.out.println("mouse dragged");
                     taskContainer = newTask;
                     event.consume();
