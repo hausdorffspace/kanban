@@ -15,27 +15,15 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
             saveToFileObject = new BufferedWriter(new FileWriter("baseData.txt", true));
             String task = message.split(":")[1];
             saveToFileObject.write(id + "," + task + "|");
+            //loggery zamiast soot
             System.out.println("task written to file ");
         } catch (Exception e) {
             e.getStackTrace();
+            //// ????? finally?
             return false;
         } finally {
             saveToFileObject.close();
-            return true;
-        }
-    }
-    public boolean deleteData() throws IOException {
-        BufferedWriter saveToFileObject = null;
-        try {
-            saveToFileObject = new BufferedWriter(new FileWriter("newData.txt"));
-
-            saveToFileObject.write("");
-            System.out.println("task written to file ");
-        } catch (Exception e) {
-            e.getStackTrace();
-            return false;
-        } finally {
-            saveToFileObject.close();
+            //try with resources lub ilioteka do zamykania
             return true;
         }
     }
@@ -52,20 +40,16 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
                 taskArray[i] = null;
                 System.out.println(" TASK DELITED");
                 if(i ==0 ){
-                    File baseData = new File("baseData.txt");
-                    baseData.delete();
+                    deleteFile(new File("baseData.txt"));
                 }
             } else {
                 try {
-                    if(i ==0 ){
-                        File baseData = new File("baseData.txt");
-                        baseData.delete();
+                    if(i == 0){
+                    deleteFile(new File("baseData.txt"));
                     }
-
                     String taskToWrite = taskArray[i].split(",")[1].trim();
+                    System.out.println("deleted");
 
-
-                       System.out.println("deleted");
                     writeDataToFile(CREATE_TASK + taskToWrite, rd.nextInt() );
                     System.out.println("writting task nr: " + taskToWrite );
                 } catch (IOException e) {
@@ -75,16 +59,18 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
         }
 
         System.out.println("File operation performed successfully");
+       //czy zawsze wzwraca rue/?
+
         return true;
 
     }
 
     @Override
     public String takeDataFromFile() {
-        BufferedReader takeFromFile = null;
+        BufferedReader dataTakerFromFile = null;
         try {
-            takeFromFile = new BufferedReader(new FileReader("baseData.txt" ));
-            String fileContent = takeFromFile.readLine();
+            dataTakerFromFile = new BufferedReader(new FileReader("baseData.txt" ));
+            String fileContent = dataTakerFromFile.readLine();
             return fileContent;
 
         } catch (Exception e) {
@@ -92,20 +78,16 @@ public class TaskRepositoryImplementation implements TaskRepositoryInterface {
         }
         finally {
             try {
-                takeFromFile.close();
+                dataTakerFromFile.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return null;
     }
-    public static String convertArrayToString(String[] strArray) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < strArray.length; i++) {
-            stringBuilder.append(strArray[i]);
 
-        }
-        return stringBuilder.toString();
+    public void deleteFile(File File){
+        File file = new File("baseData.txt");
+        file.delete();
     }
-
 }

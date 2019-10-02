@@ -131,6 +131,7 @@ public class MainBoardController {
                 }
                 event.setDropCompleted(success);
                 event.consume();
+                
             }
         });
         donePane.setOnDragOver(new EventHandler<DragEvent>() {
