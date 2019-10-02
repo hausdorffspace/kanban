@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import pl.sda.kanbanBoard.user.api.ServerWriter;
 
@@ -25,6 +26,9 @@ public class MainBoardController {
     private TextField newTaskName;
 
     private TaskButton taskContainer;
+    private Dragboard PaneDragBoard;
+    private Dragboard taskDragBoard;
+
 
     public VBox getToDoPane() {
         return toDoPane;
@@ -37,24 +41,19 @@ public class MainBoardController {
     public VBox getDonePane() {
         return donePane;
     }
-
-    Dragboard PaneDragBoard;
-    Dragboard taskDragBoard;
-    void moveTasktoToDo(Dragboard db) {
-        serverWriter.write(MOVE_TASK + db.getString() + ".0");
-    }
-    void moveTasktoDoing(Dragboard db) {
+    private void moveTasktoToDo(Dragboard db) { serverWriter.write(MOVE_TASK + db.getString() + ".0"); }
+    private void moveTasktoDoing(Dragboard db) {
         serverWriter.write(MOVE_TASK + db.getString() + ".1");
     }
-    void moveTasktoDone(Dragboard db) {
+    private void moveTasktoDone(Dragboard db) {
         serverWriter.write(MOVE_TASK + db.getString() + ".2");
     }
 
-    void deleteTaskFromToDo(Dragboard db){ serverWriter.write(DELETE_TASK + db.getString() + ".0"); }
-    void deleteTaskFromDoing(Dragboard db){
+    private void deleteTaskFromToDo(Dragboard db){ serverWriter.write(DELETE_TASK + db.getString() + ".0"); }
+    private void deleteTaskFromDoing(Dragboard db){
         serverWriter.write(DELETE_TASK + db.getString() + ".1");
     }
-    void deleteTaskFromDone(Dragboard db){ serverWriter.write(DELETE_TASK + db.getString() + ".2"); }
+    private void deleteTaskFromDone(Dragboard db){ serverWriter.write(DELETE_TASK + db.getString() + ".2"); }
 
     void deleteTask(Parent parent){
         if (parent==toDoPane) {
@@ -80,89 +79,66 @@ public class MainBoardController {
     public void initialize() {
 
         // Drag and drop handling for panes.
-        toDoPane.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                if (event.getGestureSource() != doingPane &&
-                        event.getDragboard().hasString()&&! toDoPane.getChildren().contains(taskContainer)) {
-                    event.acceptTransferModes(TransferMode.MOVE);
-                }
-                event.consume();
+        toDoPane.setOnDragOver(event -> {
+            if (event.getGestureSource() != doingPane &&
+                    event.getDragboard().hasString()&&! toDoPane.getChildren().contains(taskContainer)) {
+                event.acceptTransferModes(TransferMode.MOVE);
             }
+            event.consume();
         });
-        toDoPane.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
+        toDoPane.setOnDragDropped(event -> {
+            PaneDragBoard = event.getDragboard();
+            boolean success = false;
+            if (PaneDragBoard.hasString()) {
+                moveTasktoToDo(PaneDragBoard);
+                PaneDragBoard = null;
+                deleteTask(taskContainer.getParent());
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+        doingPane.setOnDragOver(event -> {
+            if (event.getGestureSource() != doingPane &&
+                    event.getDragboard().hasString()&& !doingPane.getChildren().contains(taskContainer)) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
+        doingPane.setOnDragDropped(event -> {
+            PaneDragBoard = event.getDragboard();
+            boolean success = false;
+            if (PaneDragBoard.hasString() ) {
+                moveTasktoDoing(PaneDragBoard);
+                PaneDragBoard = null;
+                deleteTask(taskContainer.getParent());
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+
+        });
+        donePane.setOnDragOver(event -> {
+            if (event.getGestureSource() != donePane &&
+                    event.getDragboard().hasString()&& !donePane.getChildren().contains(taskContainer)) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
+        donePane.setOnDragDropped(event -> {
+
                 PaneDragBoard = event.getDragboard();
                 boolean success = false;
                 if (PaneDragBoard.hasString()) {
-                    moveTasktoToDo(PaneDragBoard);
+                    moveTasktoDone(PaneDragBoard);
                     PaneDragBoard = null;
                     deleteTask(taskContainer.getParent());
                     success = true;
                 }
+
                 event.setDropCompleted(success);
                 event.consume();
-            }
-        });
-        doingPane.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                if (event.getGestureSource() != doingPane &&
-                        event.getDragboard().hasString()&& !doingPane.getChildren().contains(taskContainer)) {
-                    event.acceptTransferModes(TransferMode.MOVE);
-                }
-                event.consume();
-            }
-        });
-        doingPane.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                PaneDragBoard = event.getDragboard();
-                boolean success = false;
-                if (PaneDragBoard.hasString() ) {
-                    moveTasktoDoing(PaneDragBoard);
-                    PaneDragBoard = null;
-                    deleteTask(taskContainer.getParent());
 
-
-
-                    success = true;
-                }
-                event.setDropCompleted(success);
-                event.consume();
-                
-            }
-        });
-        donePane.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                if (event.getGestureSource() != donePane &&
-                        event.getDragboard().hasString()&& !donePane.getChildren().contains(taskContainer)) {
-                    event.acceptTransferModes(TransferMode.MOVE);
-                }
-                event.consume();
-            }
-        });
-        donePane.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-
-                    PaneDragBoard = event.getDragboard();
-                    boolean success = false;
-                    if (PaneDragBoard.hasString()) {
-                        moveTasktoDone(PaneDragBoard);
-                        PaneDragBoard = null;
-                        deleteTask(taskContainer.getParent());
-
-                        // getAllTasks();
-                        success = true;
-                    }
-
-                    event.setDropCompleted(success);
-                    event.consume();
-
-            }
         });
 
     }
@@ -183,24 +159,11 @@ public class MainBoardController {
         Integer taskStatus = Integer.parseInt(taskStatusS);
         TaskButton newTask = new TaskButton(taskId, taskTxt, taskStatus);
         if (taskStatus == 0) {
-            newTask.setStyle("-fx-background-color:red; -fx-opacity: 0.8;");
-            newTask.setPrefWidth(200);
-            newTask.setPrefHeight(100);
-            toDoPane.getChildren().add(newTask);
-            System.out.println("handled task created(added)");
+           createToDOTask(newTask);
         } else if (taskStatus == 1) {
-            newTask.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
-            newTask.setPrefWidth(200);
-            newTask.setPrefHeight(100);
-            doingPane.getChildren().add(newTask);
-            System.out.println("handled move task to doing(added)");
+            createDoingTask(newTask);
         } else if (taskStatus == 2) {
-            newTask.setStyle("-fx-background-color:green; -fx-opacity: 0.8;");
-            newTask.setPrefWidth(200);
-            newTask.setPrefHeight(100);
-            donePane.getChildren().add(newTask);
-            System.out.println("handled move task to done (added)");
-            //Drag and drop button handling
+           createDoneTask(newTask);
         }
             newTask.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
@@ -219,13 +182,32 @@ public class MainBoardController {
         public void handleAllTasks (String s){
             String[] tasksArray = s.split("\\|");
             for (String task : tasksArray) {
-                // handleTaskMoved(task);
-                // System.out.println("handled move task");
                 handleTask(task);
                 System.out.println("handled some task");
             }
         }
-
+    private void createToDOTask(TaskButton newTask){
+        newTask.setStyle("-fx-background-color:red; -fx-opacity: 0.8;");
+        newTask.setPrefWidth(200);
+        newTask.setPrefHeight(100);
+        toDoPane.getChildren().add(newTask);
+        System.out.println("handled task created(added)");
     }
+    private void createDoingTask(TaskButton newTask){
+        newTask.setStyle("-fx-background-color:yellow; -fx-opacity: 0.8;");
+        newTask.setPrefWidth(200);
+        newTask.setPrefHeight(100);
+        doingPane.getChildren().add(newTask);
+        System.out.println("handled move task to doing(added)");
+        }
+    private void createDoneTask(TaskButton newTask){
+        newTask.setStyle("-fx-background-color:green; -fx-opacity: 0.8;");
+        newTask.setPrefWidth(200);
+        newTask.setPrefHeight(100);
+        donePane.getChildren().add(newTask);
+        System.out.println("handled move task to done (added)");
+    }
+}
+
 
 
